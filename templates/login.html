@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Вход в аккаунт</title>
+  <style>
+    /* Стили формы */
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f7f7f7;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      margin: auto;
+      margin-top: 50px;
+    }
+
+    /* Стили для заголовка */
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    /* Стили для полей ввода */
+    input[type="email"],
+    input[type="password"] {
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      background-color: #ececec;
+      width: 100%;
+    }
+
+    /* Стили для кнопки входа */
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Стили для ссылок */
+    a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <form method="POST">
+    <h1>Вход в аккаунт</h1>
+  {% csrf_token %}
+    <input type="email" placeholder="Почта" name="email"required>
+    <input type="password" placeholder="Пароль" name="password" required>
+    <input type="submit" value="Войти">
+    <a href="#">Забыли пароль?</a>
+      {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+  </form>
+</body>
+</html>
