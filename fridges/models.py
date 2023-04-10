@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import CustomUser
+
 
 class RecipIngredient(models.Model):
     name = models.CharField(max_length=64, unique=True)
@@ -11,15 +13,11 @@ class RecipIngredient(models.Model):
         ordering = ["name"]
 
 
-class Fridge(models.Model):
-    pass
-
-
 class FridgeIngredient(models.Model):
     name = models.CharField(max_length=50)
     expiration_date = models.DateField()
     recip_ingredient = models.ForeignKey(RecipIngredient, on_delete=models.DO_NOTHING)
-    fridge = models.ForeignKey(Fridge, on_delete=models.CASCADE, related_name='products')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='products')
     quantity = models.DecimalField(max_digits=6, decimal_places=2)
     unit = models.CharField(max_length=50, choices=(('штук', 'штук'), ('грамм', 'грамм'), ('миллилитров', 'миллилитров')))
 
@@ -40,6 +38,3 @@ class Recip(models.Model):
         for i in self.ingredients.all():
             res.append(i.name)
         return res
-
-
-# Create your models here.

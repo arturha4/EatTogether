@@ -2,8 +2,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.utils import timezone
 
-from fridges.models import Fridge
-
 
 class AccountManager(BaseUserManager):
     def create_superuser(self, email, password, firstname, lastname, **other_fields):
@@ -24,7 +22,6 @@ class AccountManager(BaseUserManager):
     def create_user(self, email, password, firstname, lastname, **other_fields):
         email = self.normalize_email(email)
         user = self.model(email=email, firstname=firstname, lastname=lastname,
-                          fridge=Fridge.objects.create(),
                           **other_fields)
         user.set_password(password)
         user.save()
@@ -37,7 +34,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     room_number = models.IntegerField(null=True)
-    fridge = models.OneToOneField(Fridge, on_delete=models.CASCADE, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

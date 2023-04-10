@@ -46,7 +46,6 @@ def home(request):
 @login_required()
 def profile(request):
     if request.method == 'POST':
-        print(request.POST)
         user = CustomUser.objects.get(id=request.user.id)
         user.firstname = request.POST.get('firstname')
         user.lastname = request.POST.get('lastname')
