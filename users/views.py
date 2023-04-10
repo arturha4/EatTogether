@@ -31,8 +31,6 @@ def signup(request):
         else:
             user = CustomUser.objects.create_user(email=email, password=password, firstname=first_name,
                                                   lastname=last_name)
-            user.first_name = first_name
-            user.last_name = last_name
             user.save()
             auth.login(request, user)
             messages.success(request, 'Вы успешно зарегистрировались')
@@ -43,7 +41,7 @@ def signup(request):
 
 @login_required()
 def home(request):
-    return render(request, 'home.html', context={'user': request.user})
+    return render(request, 'home.html')
 
 @login_required()
 def profile(request):
@@ -54,7 +52,9 @@ def profile(request):
         user.lastname = request.POST.get('lastname')
         user.room_number = request.POST.get('room_number')
         user.save()
-    return render(request, 'profile.html', context={'user': request.user})
+        return redirect('profile')
+    else:
+        return render(request, 'profile.html', context={'user': request.user})
 
 @login_required()
 def logout_user(request):

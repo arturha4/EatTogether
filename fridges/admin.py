@@ -1,3 +1,7 @@
 from django.contrib import admin
+from fridges.models import FridgeIngredient, Fridge, RecipIngredient, Recip
 
-# Register your models here.
+admin.site.register(Fridge)
+admin.site.register(FridgeIngredient)
+admin.site.register(Recip)
+admin.site.register(RecipIngredient)

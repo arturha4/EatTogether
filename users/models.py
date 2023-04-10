@@ -24,6 +24,7 @@ class AccountManager(BaseUserManager):
     def create_user(self, email, password, firstname, lastname, **other_fields):
         email = self.normalize_email(email)
         user = self.model(email=email, firstname=firstname, lastname=lastname,
+                          fridge=Fridge.objects.create(),
                           **other_fields)
         user.set_password(password)
         user.save()

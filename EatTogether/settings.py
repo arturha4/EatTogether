@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'fridges'
+    'fridges',
+    'dal_select2'
 ]
 
 MIDDLEWARE = [

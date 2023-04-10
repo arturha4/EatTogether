@@ -7,21 +7,21 @@ class RecipIngredient(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["name"]
+
 
 class Fridge(models.Model):
-    room_number = models.IntegerField(unique=True)
-
-    def __str__(self):
-        return f'Холодильник в комнате: {self.room_number}'
+    pass
 
 
 class FridgeIngredient(models.Model):
     name = models.CharField(max_length=50)
     expiration_date = models.DateField()
-    recip_ingredient = models.OneToOneField(RecipIngredient, on_delete=models.DO_NOTHING)
+    recip_ingredient = models.ForeignKey(RecipIngredient, on_delete=models.DO_NOTHING)
     fridge = models.ForeignKey(Fridge, on_delete=models.CASCADE, related_name='products')
     quantity = models.DecimalField(max_digits=6, decimal_places=2)
-    unit = models.CharField(max_length=50, choices=(('pcs', 'штуки'), ('grams', 'граммы'), ('ml', 'миллилитры')))
+    unit = models.CharField(max_length=50, choices=(('штук', 'штук'), ('грамм', 'грамм'), ('миллилитров', 'миллилитров')))
 
     def __str__(self):
         return self.name
@@ -34,6 +34,12 @@ class Recip(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_name_of_ingredients(self):
+        res = []
+        for i in self.ingredients.all():
+            res.append(i.name)
+        return res
 
 
 # Create your models here.
