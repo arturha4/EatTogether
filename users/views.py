@@ -59,3 +59,7 @@ def profile(request):
 def logout_user(request):
     logout(request)
     return redirect('/signin')
+
+
+def find_closed_neighbours(request):
+    pass

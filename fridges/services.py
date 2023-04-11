@@ -1,19 +1,20 @@
 from .models import *
 
 
-def recipes_to_dict():
-    res = {"recipes": []}
+def get_recipes_dict():
+    recipes = {}
     for recip in Recip.objects.all():
-        res['recipes'].append({"recip_name": recip.name, "ingredients": recip.get_name_of_ingredients()})
-    return res
+        recipes[recip.name] = recip.get_name_of_ingredients()
+    return recipes
 
 
-def find_food_to_cook():
-    user_ingredients = input('Введите продукты, которые есть у вас, через запятую: ').split(',')
+def find_food_to_cook(input_food):
+    #users_ingredients это обьекты FridgeIngredient нашего пользователя или кооперации нескольких пользователей
+    user_ingredients = input_food
     # Создаем список для сортировки рецептов по количеству недостающих ингредиентов
     sorted_recipes = []
     # Перебираем все рецепты
-    for recipe, ingredients in recipes_to_dict()['recipes']:
+    for recipe, ingredients in get_recipes_dict().items():
         # Находим ингредиенты рецепта, которых нету среди имеющихся продуктов
         missing_ingredients = [ingredient for ingredient in ingredients if ingredient not in user_ingredients]
         # Если количество недостающих ингредиентов равно 0, добавляем рецепт в список возможных рецептов со значением "список ингредиентов пуст"

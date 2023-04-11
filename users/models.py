@@ -45,10 +45,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['firstname', 'lastname']
 
     def __str__(self):
-        return self.firstname + ' ' + self.lastname
+        return self.firstname + ' ' + self.lastname +f', комната: {self.room_number}'
 
     def get_full_name(self):
         return f'{self.firstname} {self.lastname}'
+
+    def get_user_products_names_list(self):
+        res = []
+        for pr in self.products.all():
+            res.append(pr.name)
+        return res
 
     def get_short_name(self):
         return self.firstname

@@ -26,7 +26,7 @@ class FridgeIngredient(models.Model):
 
 
 class Recip(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     ingredients = models.ManyToManyField(RecipIngredient, related_name='ingredients', blank=True)
     description = models.TextField()
 
