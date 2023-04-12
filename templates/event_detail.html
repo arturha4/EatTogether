@@ -1,10 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'header.html' %}
+{% block content %}
+  <div class="event-container">
+    <h2>{{ event.title }}</h2>
+    <p>{{ event.description }}</p>
 
-</body>
-</html>
+    <h3>Date:</h3>
+    <p>{{ event.date }}</p>
+
+    <h3>Participants:</h3>
+    <ul>
+        <li>{{ event.creator.get_full_name }}<li>
+      {% for participant in event.participants.all %}
+        <li>{{ participant.username }}</li>
+      {% empty %}
+        <li>No participants yet</li>
+      {% endfor %}
+    </ul>
+
+    {% if request.user == event.creator %}
+      <a href="{% url 'edit_event' event.id %}">Edit</a>
+      <form action="{% url 'delete_event' event.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+      </form>
+    {% else %}
+      <a href="{% url 'view_event' event.id %}">View</a>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block css %}
+  <style>
+    .event-container {
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .event-container h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0 0 20px;
+    }
+
+    .event-container h3 {
+      font-size: 1.2rem;
+    }
+
+    .event-container p {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .event-container ul {
+      margin: 0;
+    }
+
+    .event-container li {
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .event-container a {
+      display: inline-block;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      margin-right: 10px;
+    }
+
+    .event-container button {
+      display: inline-block;
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+{% endblock %}
