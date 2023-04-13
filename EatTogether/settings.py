@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'fridges',
-    'cooperation'
+    'cooperation',
+    'django_crontab',
+    'apscheduler'
 ]
 
 MIDDLEWARE = [
