@@ -8,3 +8,6 @@ class Cooperation(models.Model):
     date = models.DateTimeField()
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='created_events')
     participants = models.ManyToManyField(CustomUser, related_name='joined_events')
+
+    def __str__(self):
+        return self.title

@@ -34,7 +34,7 @@ def signup(request):
             user.save()
             auth.login(request, user)
             messages.success(request, 'Вы успешно зарегистрировались')
-            return redirect('/home')
+            return redirect('/events/home')
     else:
         return render(request, 'registration.html')
 
