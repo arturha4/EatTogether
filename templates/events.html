@@ -39,6 +39,7 @@
                     {% for event in events %}
                         <li>
                             <a href="{% url 'event-detail' event_id=event.id %}">{{ event.title }}</a>
+                            <p>Комната: {{ event.creator.room_number }}</p>
                             <p>Автор: {{ event.creator.get_full_name }}</p>
                             <p>Описание: {{ event.description }}</p>
                         </li>
