@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'users',
     'fridges',
     'cooperation',
-    'django_crontab',
     'apscheduler'
 ]
 

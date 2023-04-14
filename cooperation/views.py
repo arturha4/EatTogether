@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 
 from .models import Cooperation
 
@@ -59,6 +60,14 @@ def leave_event(request, event_id):
     event.save()
     return redirect('event-detail', event_id)
 
+
 @login_required
 def delete_participant(request, participant_id):
     pass
+
+
+@never_cache
+def refresh_events(request):
+    events = Cooperation.objects.all().order_by('date')
+    print(events)
+    return render(request,'events_block.html', context={'events': events})

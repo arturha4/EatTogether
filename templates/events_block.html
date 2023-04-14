@@ -1,0 +1,10 @@
+{% for event in events %}
+    <li>
+        <a href="{% url 'event-detail' event_id=event.id %}">{{ event.title }}</a>
+        <p>Автор: {{ event.creator.get_full_name }}</p>
+        <p>Описание: {{ event.description }}</p>
+    </li>
+    </div>
+{% empty %}
+    <p>You have no events yet.</p>
+{% endfor %}

@@ -5,6 +5,7 @@
     {% block css %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'cooperation/css/event_list.css' %}" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>My events</title>
     <link rel="stylesheet" href="event_list.css">
@@ -34,18 +35,30 @@
             <h2>Кооперации</h2>
 
             <ul class="event-list">
-                {% for event in events %}
-                    <li>
-                    <a href="{% url 'event-detail' event_id=event.id %}">{{ event.title }}</a>
-                        <p>Автор: {{ event.creator.get_full_name}}</p>
-                        <p>Описание: {{ event.description }}</p>
-                    </li>
-                {% empty %}
-                    <p>You have no events yet.</p>
-                {% endfor %}
+                <div id="events">
+                    {% for event in events %}
+                        <li>
+                            <a href="{% url 'event-detail' event_id=event.id %}">{{ event.title }}</a>
+                            <p>Автор: {{ event.creator.get_full_name }}</p>
+                            <p>Описание: {{ event.description }}</p>
+                        </li>
+                    {% empty %}
+                        <p>You have no events yet.</p>
+                    {% endfor %}
+                </div>
             </ul>
         </section>
     </main>
 </body>
-</html>
+    <script>
+        setInterval(function () {
+            $.ajax({
+                url: '{% url 'refresh_events' %}',
+                success: function (data) {
+                    $('#events').html(data);
+                }
+            });
+        }, 15000)
+    </script>
+    </html>
 {% endblock %}

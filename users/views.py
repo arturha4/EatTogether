@@ -13,7 +13,7 @@ def signin(request):
         user = authenticate(request, email=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/home')
+            return redirect('events/home/')
         else:
             messages.error(request, 'Неправильное имя пользователя или пароль')
     return render(request, 'login.html')
