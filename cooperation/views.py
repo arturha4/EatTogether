@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
-from .models import Cooperation
+from fridges.models import FridgeIngredient
+from .models import Cooperation, ProductExpiredNotification
 
 
 @login_required
@@ -18,7 +19,9 @@ def cooperation(request):
         event.participants.add(request.user)
         event.save()
         return redirect('event-detail', event.id)
-    return render(request, 'events.html', context={'events': Cooperation.objects.all()})
+    notifications = ProductExpiredNotification.objects.filter(user=request.user)
+    return render(request, 'events.html',
+                  context={'events': Cooperation.objects.all(), 'notification_count': len(notifications)})
 
 
 @login_required
@@ -69,5 +72,7 @@ def delete_participant(request, participant_id):
 @never_cache
 def refresh_events(request):
     events = Cooperation.objects.all().order_by('date')
-    print(events)
     return render(request,'events_block.html', context={'events': events})
+
+
+

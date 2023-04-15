@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'users',
     'fridges',
     'cooperation',
-    'apscheduler'
+    'apscheduler',
 ]
 
 MIDDLEWARE = [

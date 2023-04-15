@@ -1,15 +1,19 @@
 import datetime
 
 from fridges.models import FridgeIngredient
+from cooperation.models import ProductExpiredNotification
 
 
 def check_expired_products():
-    for fridge in FridgeIngredient.objects.all():
-        current_time = datetime.datetime.now() + datetime.timedelta(days=1)
-        expiration_time = fridge.expiration_date
-
-        if expiration_time <= current_time.date():
-            print(f"Продукт {fridge.name} испортился или испортится в течение 24 часов. Срок годности до:{fridge.expiration_date}")
-        else:
-            print(f"Продукт {fridge.name} не испортится в течение 24 часов. Срок годности до:{fridge.expiration_date}")
+    for product in FridgeIngredient.objects.all():
+        current_datetime = datetime.datetime.now() + datetime.timedelta(days=1)
+        current_date = current_datetime.date()
+        if product.expiration_date == current_date:
+            if not ProductExpiredNotification.objects.filter(user=product.user, text=f"Продукт {product.name} cкоро испортится. Срок годности до {product.expiration_date}"):
+                ProductExpiredNotification.objects.create(user=product.user, text=f"Продукт {product.name} скоро испортится. Срок годности до {product.expiration_date}")
+        if product.expiration_date <= datetime.datetime.now().date():
+            if not ProductExpiredNotification.objects.filter(user=product.user,
+                                                             text=f"{product.name} испортился. Срок годности истекает {product.expiration_date}"):
+                ProductExpiredNotification.objects.create(user=product.user,
+                                                          text=f"{product.name} испортился. Срок годности истеквет {product.expiration_date}")
     print('_________________________________________________________________________________________')
