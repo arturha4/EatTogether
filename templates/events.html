@@ -1,0 +1,65 @@
+{% extends 'header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'cooperation/css/event_list.css' %}" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>My events</title>
+    <link rel="stylesheet" href="event_list.css">
+    {% endblock %}
+</head>
+{% block content %}
+<body>
+    <main>
+        <section class="add-event-section">
+            <form class="event-form" action="{% url 'create-event' %}" method="POST">
+                <h3 style="text-decoration: none; color:#ffffff"; >Скооперируйтесь</h3>
+                {% csrf_token %}
+                <label style="text-decoration: none; color:#ffffff" for="title">Title: </label>
+                <input type="text" id="title" name="title">
+
+                <label style="text-decoration: none; color:#ffffff"  for="description">Description: </label>
+                <textarea id="description" name="description"></textarea>
+
+                <label style="text-decoration: none; color:#ffffff"  for="date">Date: </label>
+                <input type="datetime-local" name="date" id="date">
+
+                <button style="background-color: #ffffff; color: black" type="submit">Add</button>
+            </form>
+        </section>
+
+        <section class="event-list-section">
+            <h2>Кооперации</h2>
+
+            <ul class="event-list">
+                <div id="events">
+                    {% for event in events %}
+                        <li>
+                            <a href="{% url 'event-detail' event_id=event.id %}">{{ event.title }}</a>
+                            <p>Комната: {{ event.creator.room_number }}</p>
+                            <p>Автор: {{ event.creator.get_full_name }}</p>
+                            <p>Описание: {{ event.description }}</p>
+                        </li>
+                    {% empty %}
+                        <p>You have no events yet.</p>
+                    {% endfor %}
+                </div>
+            </ul>
+        </section>
+    </main>
+</body>
+    <script>
+        setInterval(function () {
+            $.ajax({
+                url: '{% url 'refresh_events' %}',
+                success: function (data) {
+                    $('#events').html(data);
+                }
+            });
+        }, 15000)
+    </script>
+    </html>
+{% endblock %}

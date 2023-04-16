@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    background-color: #f2f2f2;
+}
+
+header {
+    background-color: #0d6efd;;
+    color: #fff;
+    padding: 20px;
+}
+
+h1 {
+    margin: 0;
+}
+
+main {
+    padding: 20px;
+}
+
+.add-event-section, .event-list-section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+form label {
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+form input, form textarea {
+    display: block;
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 5px;
+}
+
+form button[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.event-list li {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-list li h3 {
+    margin-top: 0;
+}
+
+.event-list li p {
+    margin: 0;
+    font-style: italic;
+}
+
+.event-list li .actions {
+    display: flex;
+}
+
+.event-list li a {
+    margin-right: 10px;
+}
+
+.event-form {
+  padding: 20px;
+  background-color: #0d6efd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.event-form h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 0 20px;
+}
+
+.event-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.event-form input[type="text"],
+.event-form select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.event-form input[type="submit"] {
+  background-color: #0d6efd;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}

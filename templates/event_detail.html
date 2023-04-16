@@ -1,0 +1,117 @@
+{% extends 'header.html' %}
+{% block content %}
+    <div class="event-container">
+        {% if request.user == event.creator %}
+            <form name="mainForm" method="post" action="{% url 'profile' %}">
+                <div class="row mt-2">
+                    {% csrf_token %}
+                    <div class="col-md-8"><label class="labels">Название</label><input type="text" class="form-control"
+                                                                                       placeholder="Нвазвание"
+                                                                                       name="title"
+                                                                                       value="{{ event.title }}"></div>
+                    <div class="col-md-6"><label class="labels">Дата начала</label><input type="datetime-local"
+                                                                                          class="form-control"
+                                                                                          name="date"
+                                                                                          value="{{event.date|date:"Y-m-d"}}T{{ event.date|time:"H:i" }}"
+                                                                                          placeholder="Дата начала">
+                    </div>
+                    <div class="mt-5 text-center">
+                        <button class="btn btn-primary profile-button" type="submit">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            <h1>{{ event.title }}</h1>
+            <h2>Участники:</h2>
+            <p>{{ event.description }}</p>
+
+            <h3>Начало:</h3>
+            <p>{{ event.date }}</p>
+            <h4>Создатель:</h4>
+            <p>{{ event.creator.get_full_name }}</p>
+        {% endif %}
+        <h3>Участники:</h3>
+        <ul>
+            {% for participant in event.participants.all %}
+                <li>{{ participant.get_full_name }}</li>
+                {% if request.user == event.creator %}
+                    <a href="{% url 'delete_participant' participant_id=participant.id %}">Удалить</a>
+                    {% endif %}
+                {% empty %}
+                    <li>No participants yet</li>
+                {% endfor %}
+        </ul>
+
+        {% if request.user == event.creator %}
+            <form action="{% url 'delete_event'  event_id=event.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit">Удалить</button>
+            </form>
+        {% else %}
+            {% if is_joined %}
+                <a href="{% url 'leave_event' event_id=event.id %}">Покинуть</a>
+            {% else %}
+                <a href="{% url 'join_event' event_id=event.id %}">Присоединиться</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block css %}
+    <style>
+        .event-container {
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .event-container h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 0 20px;
+        }
+
+        .event-container h3 {
+            font-size: 1.2rem;
+        }
+
+        .event-container p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .event-container ul {
+            margin: 0;
+        }
+
+        .event-container li {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .event-container a {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .event-container button {
+            display: inline-block;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}

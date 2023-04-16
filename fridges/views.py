@@ -5,7 +5,6 @@ from django.shortcuts import render, redirect
 
 from users.models import CustomUser
 from .models import RecipIngredient, FridgeIngredient
-from .services import find_food_to_cook
 
 
 @login_required()
