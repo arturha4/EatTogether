@@ -1,10 +1,17 @@
-import random
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from rest_framework import status
+from rest_framework.response import Response
 
-from users.models import CustomUser
 from .models import RecipIngredient, FridgeIngredient
+from rest_framework.views import APIView
+
+
+class FridgeIngredientView(APIView):
+    def get(self, request):
+        print(request.data)
+        return Response(status=status.HTTP_200_OK)
+
 
 
 @login_required()
@@ -31,19 +38,3 @@ def add_food_to_fridge(request):
             fridge_ingredient.save()
     return redirect('/my-fridge')
 
-
-def recommended_food(request):
-    names_list = ['Иванов Иван', 'Петров Петр', 'Сидоров Сидор', 'Кузнецова Екатерина', 'Соловьева Вера',
-                  'Титова Анна', 'Медведева Анастасия', 'Лебедева Ольга', 'Семенова Валентина', 'Никитина Ирина',
-                  'Маркова Дарья', 'Романова Елена', 'Смирнова Александра', 'Федорова Ангелина', 'Матвеева Алена',
-                  'Михайлова Ольга', 'Новикова Юлия', 'Козлов Ярослав', 'Васильев Артем', 'Григорьев Николай',
-                  'Горбачев Егор', 'Лапин Артур', 'Карасев Александр', 'Кравец Владислав', 'Смирнов Егор',
-                  'Попов Игорь', 'Воронина Евгения', 'Соколова Оксана', 'Полякова Татьяна', 'Богданова Екатерина',
-                  'Терехова Александра', 'Белова Анастасия', 'Денисова Анна', 'Кудряшова Юлия', 'Жукова Софья',
-                  'Рябова Елена', 'Лазарева Дарья', 'Орлова Марина', 'Комарова Ирина', 'Мельникова Вера',
-                  'Громова Анастасия', 'Антонова Анна', 'Бурова Анна', 'Комиссарова Евгения', 'Логинова Ксения',
-                  'Пахомова Юлия', 'Тимофеева Анастасия', 'Шестакова Ольга', 'Фадеева Елена', 'Петухова Елена']
-    for i in names_list:
-        user = CustomUser.objects.create(email=str(random.randint(1,5344323))+"@mail.ru", firstname=i.split()[0],
-                                  lastname=i.split()[1], room_number=random.randint(100,500))
-        user.save()

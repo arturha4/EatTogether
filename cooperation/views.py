@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from rest_framework import status
@@ -11,6 +12,7 @@ from .serializers import CooperationReadSerializer, CooperationWriteSerializer
 
 
 class CooperationView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         cooperations = Cooperation.objects.all()
         serializer = CooperationReadSerializer(cooperations, many=True)
