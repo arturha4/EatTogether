@@ -1,17 +1,21 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import RecipIngredient, FridgeIngredient
 from rest_framework.views import APIView
 
+from .serializers import FridgeIngredientSerializer
+
 
 class FridgeIngredientView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
-        print(request.data)
-        return Response(status=status.HTTP_200_OK)
-
+        food = FridgeIngredient.objects.filter(user_id=request.user.id)
+        serializer = FridgeIngredientSerializer(food, many=True)
+        return Response(serializer.data)
 
 
 @login_required()
