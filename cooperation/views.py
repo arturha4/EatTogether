@@ -44,7 +44,7 @@ class CooperationDetail(APIView):
         serializer = CooperationWriteSerializer(cooperation, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -59,7 +59,6 @@ class CooperationDetail(APIView):
 @login_required
 def cooperation(request):
     if request.method == 'POST':
-        print(request.POST)
         event = Cooperation.objects.create(
             title=request.POST.get('title'),
             description=request.POST.get('description'),

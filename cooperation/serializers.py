@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework import serializers
 from .models import Cooperation, CustomUser
 
@@ -34,3 +36,9 @@ class CooperationWriteSerializer(serializers.ModelSerializer):
         if len(value) < 10:
             raise serializers.ValidationError("Short title")
         return value
+
+    # def validate_date(self, date):
+    #     delta = date.replace(tzinfo=None)-datetime.datetime.now()
+    #     if delta >= datetime.timedelta(minutes=30):
+    #         return date
+    #     return serializers.ValidationError('Создать совместное приготовление можно не меньше чем за 30 минут')
