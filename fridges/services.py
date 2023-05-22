@@ -1,4 +1,19 @@
 from .models import *
+import requests
+import json
+
+def get_food_openfood(barcode:str):
+    url = f'https://world.openfoodfacts.org/api/v0/product/{barcode}.json'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = json.loads(response.content.decode('utf-8'))
+        product_name = data['product']['product_name']
+        ingredients = data['product']['ingredients_text']
+        nutrition = data['product']['nutriments']
+
+    else:
+        #предложить юзеру ввести данные вручную
+        pass
 
 
 def get_recipes_dict():

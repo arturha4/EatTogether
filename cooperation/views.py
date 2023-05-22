@@ -1,15 +1,64 @@
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from fridges.models import FridgeIngredient
+from rest_framework import status
 from .models import Cooperation, ProductExpiredNotification
+from rest_framework.views import APIView
+from .serializers import CooperationReadSerializer, CooperationWriteSerializer
+
+
+class CooperationView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        cooperations = Cooperation.objects.all()
+        serializer = CooperationReadSerializer(cooperations, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        event = request.data
+        serializer = CooperationWriteSerializer(data=event)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(data={'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CooperationDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Cooperation.objects.get(id=pk)
+        except Cooperation.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        cooperation = self.get_object(pk)
+        serializer = CooperationReadSerializer(cooperation)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        cooperation = self.get_object(pk)
+        serializer = CooperationWriteSerializer(cooperation, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, pk):
+        cooperation = self.get_object(pk)
+        cooperation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 @login_required
 def cooperation(request):
     if request.method == 'POST':
-        print(request.POST)
         event = Cooperation.objects.create(
             title=request.POST.get('title'),
             description=request.POST.get('description'),
