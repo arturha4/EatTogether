@@ -1,19 +1,16 @@
 from .models import *
-import requests
-import json
+import cv2
+from pyzbar.pyzbar import decode
 
-def get_food_openfood(barcode:str):
-    url = f'https://world.openfoodfacts.org/api/v0/product/{barcode}.json'
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = json.loads(response.content.decode('utf-8'))
-        product_name = data['product']['product_name']
-        ingredients = data['product']['ingredients_text']
-        nutrition = data['product']['nutriments']
 
-    else:
-        #предложить юзеру ввести данные вручную
-        pass
+def get_food_openfood(barcode: str):
+    import requests
+    from bs4 import BeautifulSoup
+    url = f'https://barcode-list.ru/barcode/RU/%D0%9F%D0%BE%D0%B8%D1%81%D0%BA.htm?barcode=+{barcode}'
+    reqs = requests.get(url)
+    soup = BeautifulSoup(reqs.text, 'html.parser')
+    for title in soup.find('title'):
+        print(title.get_text().split(' - ')[0])
 
 
 def get_recipes_dict():
@@ -23,8 +20,23 @@ def get_recipes_dict():
     return recipes
 
 
+def parse_image():
+    # загрузка изображения
+    img = cv2.imread('barcode.png')
+
+    # декодирование баркода
+    barcodes = decode(img)
+
+    # вывод результата
+    for barcode in barcodes:
+        print(barcode.data.decode('utf-8'))
+
+
+parse_image()
+
+
 def find_food_to_cook(input_food):
-    #users_ingredients это обьекты FridgeIngredient нашего пользователя или кооперации нескольких пользователей
+    # users_ingredients это обьекты FridgeIngredient нашего пользователя или кооперации нескольких пользователей
     user_ingredients = input_food
     # Создаем список для сортировки рецептов по количеству недостающих ингредиентов
     sorted_recipes = []

@@ -71,3 +71,18 @@ class CooperationTests(APITestCase):
         response = self.client.put(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['participants'], list(cooperation.participants.values_list('id', flat=True)))
+
+    def test_user_leave_to_cooperation(self):
+        self.authenticate()
+        cooperation = CooperationTests.create_and_get_cooperation()
+        user1, user2 = CooperationTests.create_and_get_user(),\
+                       CooperationTests.create_and_get_user(email='artdav@mail.ru')
+        url = reverse('cooperation-detail', kwargs={'pk': cooperation.id})
+        data = {'participants': [user1.id, user2.id]}
+        self.client.put(url, data=data, format='json')
+        print(Cooperation.objects.get(id=cooperation.id).participants)
+        url = reverse('leave-event', kwargs={'pk': cooperation.id})
+        response = self.client.post(url, data=data, format='json')
+        print(Cooperation.objects.get(id=cooperation.id).participants)
+        self.assertEqual(1, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['participants'], list(cooperation.participants.values_list('id', flat=True)))

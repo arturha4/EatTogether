@@ -55,12 +55,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         for pr in self.products.all():
             res.append(pr.name)
         return res
-
-    def get_short_name(self):
-        return self.firstname
-
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
