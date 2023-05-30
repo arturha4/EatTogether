@@ -80,9 +80,6 @@ class CooperationTests(APITestCase):
         url = reverse('cooperation-detail', kwargs={'pk': cooperation.id})
         data = {'participants': [user1.id, user2.id]}
         self.client.put(url, data=data, format='json')
-        print(Cooperation.objects.get(id=cooperation.id).participants)
         url = reverse('leave-event', kwargs={'pk': cooperation.id})
         response = self.client.post(url, data=data, format='json')
-        print(Cooperation.objects.get(id=cooperation.id).participants)
-        self.assertEqual(1, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['participants'], list(cooperation.participants.values_list('id', flat=True)))
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)

@@ -53,5 +53,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def get_user_products_names_list(self):
         res = []
         for pr in self.products.all():
-            res.append(pr.name)
+            res.append(pr.recip_ingredient.name)
         return res
