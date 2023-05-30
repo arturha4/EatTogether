@@ -14,9 +14,6 @@ from users.serializers import SignUpSerializer
 class RegisterView(APIView):
     permission_classes = []
 
-    def get(self, request):
-        return Response(status=status.HTTP_200_OK)
-
     def post(self, request):
         """
         Возвращает email юзера и 201 статус, если регистрация прошла успешно

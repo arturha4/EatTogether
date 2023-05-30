@@ -20,5 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
     path('fridge/', include('fridges.urls')),
-    path('events/', include('cooperation.urls'))
+    path('cooperations/', include('cooperation.urls'))
 ]

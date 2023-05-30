@@ -53,14 +53,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def get_user_products_names_list(self):
         res = []
         for pr in self.products.all():
-            res.append(pr.name)
+            res.append(pr.recip_ingredient.name)
         return res
-
-    def get_short_name(self):
-        return self.firstname
-
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
